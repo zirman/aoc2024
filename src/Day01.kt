@@ -1,21 +1,40 @@
+import kotlin.math.absoluteValue
+
 fun main() {
+    fun parse(input: List<String>): List<Pair<Int, Int>> = input.map { line ->
+        val (a, b) = line.split("""\s+""".toRegex())
+        Pair(
+            a.toInt(),
+            b.toInt(),
+        )
+    }
+
     fun part1(input: List<String>): Int {
-        return input.size
+        val list = parse(input)
+        val listA = list.map { it.first }.sorted()
+        val listB = list.map { it.second }.sorted()
+        return listA.zip(listB).sumOf { (a, b) -> (b - a).absoluteValue }
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val list = parse(input)
+        val listA = list.map { it.first }
+        val listB = list.map { it.second }
+        return listA.sumOf { i -> listB.count { k -> k == i } * i }
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
-
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    // Read the input from the `src/Day01.txt` file.
+    val testInput =
+        """
+            3   4
+            4   3
+            2   5
+            1   3
+            3   9
+            3   3
+        """.trimIndent().split('\n')
+    check(part1(testInput) == 11)
     val input = readInput("Day01")
     part1(input).println()
+    check(part2(testInput) == 31)
     part2(input).println()
 }
