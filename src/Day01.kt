@@ -3,23 +3,16 @@ import kotlin.math.absoluteValue
 fun main() {
     fun parse(input: List<String>): List<Pair<Int, Int>> = input.map { line ->
         val (a, b) = line.split("""\s+""".toRegex())
-        Pair(
-            a.toInt(),
-            b.toInt(),
-        )
+        Pair(a.toInt(), b.toInt())
     }
 
     fun part1(input: List<String>): Int {
-        val list = parse(input)
-        val listA = list.map { it.first }.sorted()
-        val listB = list.map { it.second }.sorted()
-        return listA.zip(listB).sumOf { (a, b) -> (b - a).absoluteValue }
+        val (listA, listB) = parse(input).unzip()
+        return listA.sorted().zip(listB.sorted()).sumOf { (a, b) -> (b - a).absoluteValue }
     }
 
     fun part2(input: List<String>): Int {
-        val list = parse(input)
-        val listA = list.map { it.first }
-        val listB = list.map { it.second }
+        val (listA, listB) = parse(input).unzip()
         return listA.sumOf { i -> listB.count { k -> k == i } * i }
     }
 
