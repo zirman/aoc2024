@@ -1,7 +1,8 @@
 fun <T> List<T>.dropAt(index: Int): List<T> = filterIndexed { i, item -> index != i }
+private typealias Input2 = List<List<Int>>
 
 fun main() {
-    fun List<String>.parse(): List<List<Int>> = map { it.split(' ') }.map { it.map { it.toInt() } }
+    fun List<String>.parse(): Input2 = map { it.split(' ') }.map { it.map { it.toInt() } }
 
     fun List<Int>.isSafe(): Boolean {
         val diffs = windowed(2).map { (a, b) -> b - a }
@@ -9,8 +10,8 @@ fun main() {
     }
 
     fun List<Int>.isSafe2(): Boolean = isSafe() || indices.any { index -> dropAt(index).isSafe() }
-    fun List<List<Int>>.part1(): Int = count { it.isSafe() }
-    fun List<List<Int>>.part2(): Int = count { it.isSafe2() }
+    fun Input2.part1(): Int = count { it.isSafe() }
+    fun Input2.part2(): Int = count { it.isSafe2() }
 
     val testInput = """
         7 6 4 2 1
