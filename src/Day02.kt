@@ -1,4 +1,4 @@
-fun <T> List<T>.dropAt(index: Int): List<T> = mapIndexedNotNull { i, item -> if (index != i) item else null }
+fun <T> List<T>.dropAt(index: Int): List<T> = filterIndexed { i, item -> index != i }
 
 fun main() {
     fun List<String>.parse(): List<List<Int>> = map { it.split(' ') }.map { it.map { it.toInt() } }
