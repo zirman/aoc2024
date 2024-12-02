@@ -10,15 +10,7 @@ fun main() {
         return diffs.all { it in 1..3 } || diffs.all { it >= -3 && it <= -1 }
     }
 
-    fun List<Int>.isSafe2(): Boolean {
-        if (isSafe()) return true
-        indices.forEach { index ->
-            if (dropAt(index).isSafe()) {
-                return true
-            }
-        }
-        return false
-    }
+    fun List<Int>.isSafe2(): Boolean = isSafe() || indices.any { index -> dropAt(index).isSafe() }
 
     fun part1(input: List<String>): Int {
         return parse(input).count { it.isSafe() }
