@@ -1,7 +1,7 @@
 fun <T> List<T>.dropAt(index: Int): List<T> = mapIndexedNotNull { i, item -> if (index != i) item else null }
 
 fun main() {
-    fun parse(input: List<String>): List<List<Int>> = input.map { it.split(' ') }.map { it.map { it.toInt() } }
+    fun List<String>.parse(): List<List<Int>> = map { it.split(' ') }.map { it.map { it.toInt() } }
 
     fun List<Int>.isSafe(): Boolean {
         val diffs = windowed(2).map { (a, b) -> b - a }
@@ -9,8 +9,8 @@ fun main() {
     }
 
     fun List<Int>.isSafe2(): Boolean = isSafe() || indices.any { index -> dropAt(index).isSafe() }
-    fun part1(input: List<String>): Int = parse(input).count { it.isSafe() }
-    fun part2(input: List<String>): Int = parse(input).count { it.isSafe2() }
+    fun List<List<Int>>.part1(): Int = count { it.isSafe() }
+    fun List<List<Int>>.part2(): Int = count { it.isSafe2() }
 
     val testInput = """
         7 6 4 2 1
@@ -19,10 +19,10 @@ fun main() {
         1 3 2 4 5
         8 6 4 4 1
         1 3 6 7 9
-    """.trimIndent().split('\n')
-    check(part1(testInput) == 2)
-    val input = readInput("Day02")
-    part1(input).println()
-    check(part2(testInput) == 4)
-    part2(input).println()
+    """.trimIndent().split('\n').parse()
+    check(testInput.part1() == 2)
+    val input = readInput("Day02").parse()
+    input.part1().println()
+    check(testInput.part2() == 4)
+    input.part2().println()
 }
