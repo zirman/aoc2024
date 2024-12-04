@@ -1,21 +1,23 @@
+private typealias Input14 = List<String>
+
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    fun List<String>.parse(): Input14 {
+        return this
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun Input14.part1(): Int {
+        TODO()
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
+    fun Input14.part2(): Int {
+        TODO()
+    }
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+    val testInput = """
+    """.trimIndent().split('\n').parse()
+    check(testInput.part1() == TODO())
+    val input = readInput("Day14").parse()
+    input.part1().println()
+//    check(testInput.part2() == 4)
+//    input.part2().println()
 }

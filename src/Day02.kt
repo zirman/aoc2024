@@ -1,4 +1,3 @@
-fun <T> List<T>.dropAt(index: Int): List<T> = filterIndexed { i, item -> index != i }
 private typealias Input2 = List<List<Int>>
 
 fun main() {
