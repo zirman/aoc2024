@@ -2,7 +2,7 @@ private typealias Input4 = List<String>
 
 typealias RegexGrid = List<List<Regex>>
 
-fun String.toRegexGrid(): RegexGrid = trimIndent().split("\n\n").map { it.split('\n').map { it.toRegex() } }
+fun List<String>.toRegexGrid(): RegexGrid = map { it.split('\n').map { it.toRegex() } }
 
 fun RegexGrid.matchesAt(row: Int, index: Int, input: List<String>): Int = count { regexes ->
     regexes
@@ -48,7 +48,7 @@ fun main() {
             ..M.
             .A..
             S...
-        """.toRegexGrid()
+        """.trimIndent().split("\n\n").toRegexGrid()
 
         var count = 0
         for (r in 0..<size) {
@@ -77,7 +77,7 @@ fun main() {
             M.M
             .A.
             S.S
-        """.toRegexGrid()
+        """.trimIndent().split("\n\n").toRegexGrid()
 
         var count = 0
         for (r in 0..<size) {
