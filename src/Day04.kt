@@ -1,90 +1,91 @@
 private typealias Input4 = List<String>
 
+typealias RegexGrid = List<List<Regex>>
+
+fun String.toRegexGrid(): RegexGrid = trimIndent().split("\n\n").map { it.split('\n').map { it.toRegex() } }
+
+fun RegexGrid.matchesAt(row: Int, index: Int, input: List<String>): Int = count { regexes ->
+    regexes
+        .mapIndexed { r, regex -> row + r < input.size && regex.matchesAt(input[row + r], index) }
+        .all { it }
+}
+
 fun main() {
-    val xmasRegex = """XMAS""".toRegex()
-    fun List<String>.parse(): Input4 {
-        return this
-    }
+    fun List<String>.parse(): Input4 = this
 
-    fun Input4.transposed(): Input4 {
-        return (0..<first().length)
-            .map { i -> joinToString("") { it -> "${it[i]}" } }
-    }
+    fun List<String>.part1(): Int {
+        val patterns: RegexGrid = """
+            XMAS
 
-    //    fun Input4.diagonals(): Input4 {
-//        return indices
-//            .map { i -> (0..i).joinToString("") { k -> "${this[i - k][k]}" } }
-//    }
-    fun Input4.countDiagonals(): Int {
+            SAMX
+
+            X
+            M
+            A
+            S
+
+            S
+            A
+            M
+            X
+
+            X...
+            .M..
+            ..A.
+            ...S
+
+            S...
+            .A..
+            ..M.
+            ...X
+
+            ...S
+            ..A.
+            .M..
+            X...
+
+            ...X
+            ..M.
+            .A..
+            S...
+        """.toRegexGrid()
+
         var count = 0
-        indices
-            .map { i -> (0..i).joinToString("") { k -> "${this[i - k][k]}" } }
-            .also { println(it) }.forEach { line ->
-                var match = xmasRegex.find(line)
-                while (match != null) {
-                    count++
-                    match = match.next()
-                }
-                match = xmasRegex.find(line.reversed())
-                while (match != null) {
-                    count++
-                    match = match.next()
-                }
+        for (r in 0..<size) {
+            for (c in 0..<size) {
+                count += patterns.matchesAt(r, c, this)
             }
-        (size - 1 downTo 1)
-            .map { i ->
-                val q = size - i
-                (0..<i).joinToString("") { k ->
-                    "${this[size - k - 1][q + k]}"
-                }
-            }.also { println(it) }.forEach { line ->
-                var match = xmasRegex.find(line)
-                while (match != null) {
-                    count++
-                    match = match.next()
-                }
-                match = xmasRegex.find(line.reversed())
-                while (match != null) {
-                    count++
-                    match = match.next()
-                }
-            }
+        }
         return count
     }
 
-    fun Input4.part1(): Int {
-        var count = 0
-        forEach { line ->
-            var match = xmasRegex.find(line)
-            while (match != null) {
-                count++
-                match = match.next()
-            }
-            match = xmasRegex.find(line.reversed())
-            while (match != null) {
-                count++
-                match = match.next()
-            }
-        }
-        transposed().forEach { line ->
-            var match = xmasRegex.find(line)
-            while (match != null) {
-                count++
-                match = match.next()
-            }
-            match = xmasRegex.find(line.reversed())
-            while (match != null) {
-                count++
-                match = match.next()
-            }
-        }
-        count += countDiagonals()
-        count += transposed().map { it.toList().reversed().joinToString("")}.countDiagonals()
-        return count
-    }
 
     fun Input4.part2(): Int {
-        TODO()
+        val patterns: RegexGrid = """
+            M.S
+            .A.
+            M.S
+
+            S.M
+            .A.
+            S.M
+
+            S.S
+            .A.
+            M.M
+
+            M.M
+            .A.
+            S.S
+        """.toRegexGrid()
+
+        var count = 0
+        for (r in 0..<size) {
+            for (c in 0..<size) {
+                count += patterns.matchesAt(r, c, this)
+            }
+        }
+        return count
     }
 
     val testInput = """
@@ -98,10 +99,10 @@ fun main() {
         SAXAMASAAA
         MAMMMXMMMM
         MXMXAXMASX
-    """.trimIndent().split('\n').parse()
+    """.trimIndent().split('\n')
     check(testInput.part1() == 18)
-    val input = readInput("Day04").parse()
+    val input = readInput("Day04")
     input.part1().println()
-//    check(testInput.part2() == 4)
-//    input.part2().println()
+    check(testInput.parse().part2() == 9)
+    input.parse().part2().println()
 }
