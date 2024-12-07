@@ -19,14 +19,21 @@ fun main() {
         return recur(rhs[0], 1)
     }
 
-    fun Input7.part1(): Long {
-        return sumOf { pair ->
-            if (pair.isCalibrated()) {
-                pair.result
-            } else {
-                0
-            }
+    fun Input7.part1(): Long = sumOf { pair ->
+        if (pair.isCalibrated()) {
+            pair.result
+        } else {
+            0
         }
+    }
+
+    fun concatenation(left: Long, right: Long): Long {
+        var shift = 1L
+        var left = left
+        while (right / shift > 0) {
+            shift *= 10
+        }
+        return (left * shift) + right
     }
 
     fun Calibration.isCalibrated2(): Boolean {
@@ -35,7 +42,7 @@ fun main() {
             top > result -> false
             else -> recur(top = top + rhs[index], index = index + 1) ||
                     recur(top = top * rhs[index], index = index + 1) ||
-                    recur(top = (top.toString() + rhs[index].toString()).toLong(), index = index + 1)
+                    recur(top = concatenation(top, rhs[index]), index = index + 1)
         }
         return recur(rhs[0], 1)
     }
