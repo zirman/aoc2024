@@ -256,6 +256,6 @@ fun main() {
     check(testInput.part1() == 41)
     val input = readInput("Day06").parse()
     measureTimeMillis { input.part1().println() }.also { println("time: $it") }
-    check(testInput.part2().also { println(it) } == 6)
+    check(testInput.part2() == 6)
     measureTimeMillis { input.part2().println() }.also { println("time: $it") }
 }
