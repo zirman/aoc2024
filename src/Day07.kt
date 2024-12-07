@@ -16,7 +16,7 @@ fun main() {
             else -> recur(top = top + rhs[index], index = index + 1) ||
                     recur(top = top * rhs[index], index = index + 1)
         }
-        return recur(rhs[0], 1)
+        return recur(top = rhs[0], index = 1)
     }
 
     fun Input7.part1(): Long = sumOf { pair ->
@@ -29,7 +29,6 @@ fun main() {
 
     fun concatenation(left: Long, right: Long): Long {
         var shift = 1L
-        var left = left
         while (right / shift > 0) {
             shift *= 10
         }
@@ -44,7 +43,7 @@ fun main() {
                     recur(top = top * rhs[index], index = index + 1) ||
                     recur(top = concatenation(top, rhs[index]), index = index + 1)
         }
-        return recur(rhs[0], 1)
+        return recur(top = rhs[0], index = 1)
     }
 
     fun Input7.part2(): Long = sumOf { pair ->
