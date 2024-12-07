@@ -28,7 +28,7 @@ fun main() {
     }
 
     fun concatenation(left: Long, right: Long): Long {
-        var shift = 1L
+        var shift = 1
         while (right / shift > 0) {
             shift *= 10
         }
@@ -39,8 +39,8 @@ fun main() {
         fun recur(top: Long, index: Int): Boolean = when {
             index >= rhs.size -> top == result
             top > result -> false
-            else -> recur(top = top + rhs[index], index = index + 1) ||
-                    recur(top = top * rhs[index], index = index + 1) ||
+            else -> recur(top = top * rhs[index], index = index + 1) ||
+                    recur(top = top + rhs[index], index = index + 1) ||
                     recur(top = concatenation(top, rhs[index]), index = index + 1)
         }
         return recur(top = rhs[0], index = 1)
