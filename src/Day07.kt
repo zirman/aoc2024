@@ -1,77 +1,49 @@
-private typealias Input7 = List<Pair<Long, List<Long>>>
+import kotlin.system.measureTimeMillis
+
+private data class Calibration(val result: Long, val rhs: List<Long>)
+private typealias Input7 = List<Calibration>
 
 fun main() {
     fun List<String>.parse(): Input7 = map { line ->
         val (result, values) = line.split(": ")
-        Pair(result.toLong(), values.split(' ').map { it.toLong() })
+        Calibration(result = result.toLong(), rhs = values.split(' ').map { it.toLong() })
+    }
+
+    fun Calibration.isCalibrated(): Boolean {
+        fun recur(top: Long, index: Int): Boolean = when {
+            index >= rhs.size -> top == result
+            top > result -> false
+            else -> recur(top = top + rhs[index], index = index + 1) ||
+                    recur(top = top * rhs[index], index = index + 1)
+        }
+        return recur(rhs[0], 1)
     }
 
     fun Input7.part1(): Long {
-        fun recur(result: Long, values: List<Long>): Boolean {
-            if (values.isEmpty()) {
-                throw IllegalStateException()
-            }
-            if (values.size == 1) {
-                return values[0] == result
-            }
-            return recur(
-                result,
-                buildList {
-                    add(values[0] + values[1])
-                    addAll(values.subList(2, values.size))
-                },
-            ) || recur(
-                result,
-                buildList {
-                    add(values[0] * values[1])
-                    addAll(values.subList(2, values.size))
-                },
-            )
-        }
         return sumOf { pair ->
-            val result = pair.first
-            val values = pair.second
-            if (recur(result, values)) {
-                result
+            if (pair.isCalibrated()) {
+                pair.result
             } else {
                 0
             }
         }
     }
 
-    fun Input7.part2(): Long {
-        fun recur(result: Long, values: List<Long>): Boolean {
-            if (values.isEmpty()) {
-                throw IllegalStateException()
-            }
-            if (values.size == 1) {
-                return values[0] == result
-            }
-            return recur(
-                result,
-                buildList {
-                    add(values[0] + values[1])
-                    addAll(values.subList(2, values.size))
-                },
-            ) || recur(
-                result,
-                buildList {
-                    add(values[0] * values[1])
-                    addAll(values.subList(2, values.size))
-                },
-            ) || recur (
-                result,
-                buildList {
-                    add((values[0].toString() + values[1].toString()).toLong())
-                    addAll(values.subList(2, values.size))
-                },
-            )
+    fun Calibration.isCalibrated2(): Boolean {
+        fun recur(top: Long, index: Int): Boolean = when {
+            index >= rhs.size -> top == result
+            top > result -> false
+            else -> recur(top = top + rhs[index], index = index + 1) ||
+                    recur(top = top * rhs[index], index = index + 1) ||
+                    recur(top = (top.toString() + rhs[index].toString()).toLong(), index = index + 1)
         }
+        return recur(rhs[0], 1)
+    }
+
+    fun Input7.part2(): Long {
         return sumOf { pair ->
-            val result = pair.first
-            val values = pair.second
-            if (recur(result, values)) {
-                result
+            if (pair.isCalibrated2()) {
+                pair.result
             } else {
                 0
             }
@@ -91,7 +63,9 @@ fun main() {
     """.trimIndent().split('\n').parse()
     check(testInput.part1() == 3749L)
     val input = readInput("Day07").parse()
-    input.part1().println()
+    measureTimeMillis { input.part1().println() }
+        .also { println("time: $it") }
     check(testInput.part2() == 11387L)
-    input.part2().println()
+    measureTimeMillis { input.part2().println() }
+        .also { println("time: $it") }
 }
