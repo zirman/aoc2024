@@ -47,13 +47,11 @@ fun main() {
         return recur(rhs[0], 1)
     }
 
-    fun Input7.part2(): Long {
-        return sumOf { pair ->
-            if (pair.isCalibrated2()) {
-                pair.result
-            } else {
-                0
-            }
+    fun Input7.part2(): Long = sumOf { pair ->
+        if (pair.isCalibrated2()) {
+            pair.result
+        } else {
+            0
         }
     }
 
