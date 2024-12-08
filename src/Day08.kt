@@ -9,26 +9,20 @@ fun main() {
     ).filter { it in this }
 
     fun Size.antiNodesOf2(pos1: Pos, pos2: Pos): List<Pos> = buildList {
-        add(pos1)
-        add(pos2)
-        var diff = pos2 - pos1
-        var pos = pos2 + diff
-        while (true) {
-            if ((pos in this).not()) {
-                break
+        fun addAntiNodes(pos1: Pos, pos2: Pos) {
+            val diff = pos2 - pos1
+            var pos = pos2 + diff
+            add(pos2)
+            while (true) {
+                if ((pos in this@antiNodesOf2).not()) {
+                    break
+                }
+                add(pos)
+                pos += diff
             }
-            add(pos)
-            pos += diff
         }
-        diff = pos1 - pos2
-        pos = pos + diff
-        while (true) {
-            if ((pos in this).not()) {
-                break
-            }
-            add(pos)
-            pos += diff
-        }
+        addAntiNodes(pos2, pos1)
+        addAntiNodes(pos1, pos2)
     }
 
     fun List<String>.parse(): Input8 {
