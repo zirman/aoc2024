@@ -6,7 +6,7 @@ fun main() {
     fun antiNodes(pos1: Pos, pos2: Pos, size: Size): List<Pos> = listOf(
         pos2 + (pos2 - pos1),
         pos1 + (pos1 - pos2),
-    ).filter { pos -> pos in size }
+    ).filter { it in size }
 
     fun antiNodes2(pos1: Pos, pos2: Pos, size: Size): List<Pos> = buildList {
         add(pos1)
