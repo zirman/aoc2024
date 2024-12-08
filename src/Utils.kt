@@ -21,6 +21,14 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 fun Any?.println() = println(this)
 
 data class Pos(val row: Int, val col: Int)
+operator fun Pos.minus(pos: Pos): Pos = Pos(
+    this.row - pos.row,
+    this.col - pos.col,
+)
+operator fun Pos.plus(pos: Pos): Pos = Pos(
+    this.row + pos.row,
+    this.col + pos.col,
+)
 data class Size(val width: Int, val height: Int)
 
 fun List<String>.toSize(): Size = Size(width = this[0].length, height = this.size)

@@ -4,50 +4,30 @@ private typealias Input8 = Pair<List<List<Pos>>, Size>
 
 fun main() {
     fun antiNodes(pos1: Pos, pos2: Pos, size: Size): List<Pos> = listOf(
-        Pos(
-            row = pos2.row + (pos2.row - pos1.row),
-            col = pos2.col + (pos2.col - pos1.col),
-        ),
-        Pos(
-            row = pos1.row + (pos1.row - pos2.row),
-            col = pos1.col + (pos1.col - pos2.col),
-        ),
+        pos2 + (pos2 - pos1),
+        pos1 + (pos1 - pos2),
     ).filter { pos -> size.contains(pos) }
 
     fun antiNodes2(pos1: Pos, pos2: Pos, size: Size): List<Pos> = buildList {
-        var row = pos2.row - pos1.row
-        var col = pos2.col - pos1.col
-        var pos = Pos(
-            row = pos2.row + row,
-            col = pos2.col + col,
-        )
         add(pos1)
-        while (true) {
-            if (size.contains(pos).not()) {
-                break
-            }
-            add(pos)
-            pos = pos.copy(
-                row = pos.row + row,
-                col = pos.col + col,
-            )
-        }
-        row = pos1.row - pos2.row
-        col = pos1.col - pos2.col
-        pos = Pos(
-            row = pos1.row + row,
-            col = pos1.col + col,
-        )
         add(pos2)
+        var diff = pos2 - pos1
+        var pos = pos2 + diff
         while (true) {
             if (size.contains(pos).not()) {
                 break
             }
             add(pos)
-            pos = pos.copy(
-                row = pos.row + row,
-                col = pos.col + col,
-            )
+            pos += diff
+        }
+        diff = pos1 - pos2
+        pos = pos + diff
+        while (true) {
+            if (size.contains(pos).not()) {
+                break
+            }
+            add(pos)
+            pos += diff
         }
     }
 
