@@ -47,18 +47,18 @@ fun <T> List<T>.dropAt(index: Int): List<T> = filterIndexed { i, t -> index != i
 
 fun <T> Iterable<T>.countUnique(): Int = toSet().size
 
-fun <T> List<T>.permutation(prefix: List<T> = emptyList()): List<List<T>> {
+fun <T> List<T>.permutations(prefix: List<T> = emptyList()): List<List<T>> {
     if (isEmpty()) {
         return listOf(prefix)
     }
     return flatMapIndexed { index, t ->
         buildList(size - 1) {
-            this@permutation.forEachIndexed { index2, t ->
+            this@permutations.forEachIndexed { index2, t ->
                 if (index != index2) {
                     add(t)
                 }
             }
-        }.permutation(
+        }.permutations(
             buildList(prefix.size + 1) {
                 addAll(prefix)
                 add(t)
@@ -67,15 +67,15 @@ fun <T> List<T>.permutation(prefix: List<T> = emptyList()): List<List<T>> {
     }
 }
 
-fun <T> List<T>.combination(size: Int): List<List<T>> {
+fun <T> List<T>.combinations(size: Int): List<List<T>> {
     fun MutableList<List<T>>.recur(i: Int, c: List<T>) {
         if (c.size == size) {
             this@recur.add(c)
             return
         }
 
-        (i..<this@combination.size).forEach { t ->
-            recur(t + 1, c + this@combination[t])
+        (i..<this@combinations.size).forEach { t ->
+            recur(t + 1, c + this@combinations[t])
         }
     }
     return buildList {

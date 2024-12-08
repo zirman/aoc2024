@@ -38,7 +38,7 @@ fun main() {
 
     fun Input8.part1(): Int = antennaGroups
         .flatMap { antennaGroup ->
-            antennaGroup.combination(2).flatMap { (a, b) ->
+            antennaGroup.combinations(2).flatMap { (a, b) ->
                 size.antiNodesOf(a, b)
             }
         }
@@ -46,7 +46,7 @@ fun main() {
 
     fun Input8.part2(): Int = antennaGroups
         .flatMap { antennaGroup ->
-            antennaGroup.combination(2).flatMap { (a, b) ->
+            antennaGroup.combinations(2).flatMap { (a, b) ->
                 size.antiNodesOf2(a, b)
             }
         }
