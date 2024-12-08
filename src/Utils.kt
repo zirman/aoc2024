@@ -33,7 +33,7 @@ data class Size(val width: Int, val height: Int)
 
 fun List<String>.toSize(): Size = Size(width = this[0].length, height = this.size)
 
-fun Size.contains(pos: Pos): Boolean =
+operator fun Size.contains(pos: Pos): Boolean =
     pos.row >= 0 && pos.row < height &&
             pos.col >= 0 && pos.col < width
 

@@ -6,7 +6,7 @@ fun main() {
     fun antiNodes(pos1: Pos, pos2: Pos, size: Size): List<Pos> = listOf(
         pos2 + (pos2 - pos1),
         pos1 + (pos1 - pos2),
-    ).filter { pos -> size.contains(pos) }
+    ).filter { pos -> pos in size }
 
     fun antiNodes2(pos1: Pos, pos2: Pos, size: Size): List<Pos> = buildList {
         add(pos1)
@@ -14,7 +14,7 @@ fun main() {
         var diff = pos2 - pos1
         var pos = pos2 + diff
         while (true) {
-            if (size.contains(pos).not()) {
+            if ((pos in size).not()) {
                 break
             }
             add(pos)
@@ -23,7 +23,7 @@ fun main() {
         diff = pos1 - pos2
         pos = pos + diff
         while (true) {
-            if (size.contains(pos).not()) {
+            if ((pos in size).not()) {
                 break
             }
             add(pos)
