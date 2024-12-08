@@ -28,16 +28,16 @@ fun printlnMeasureTimeMillis(block: () -> Unit) {
 
 data class Pos(val row: Int, val col: Int)
 operator fun Pos.minus(pos: Pos): Pos = Pos(
-    this.row - pos.row,
-    this.col - pos.col,
+    row - pos.row,
+    col - pos.col,
 )
 operator fun Pos.plus(pos: Pos): Pos = Pos(
-    this.row + pos.row,
-    this.col + pos.col,
+    row + pos.row,
+    col + pos.col,
 )
 data class Size(val width: Int, val height: Int)
 
-fun List<String>.toSize(): Size = Size(width = this[0].length, height = this.size)
+fun List<String>.toSize(): Size = Size(width = this[0].length, height = size)
 
 operator fun Size.contains(pos: Pos): Boolean =
     pos.row >= 0 && pos.row < height &&
