@@ -69,7 +69,6 @@ fun main() {
     check(testInput.part1() == 14)
     val input = readInput("Day08").parse()
     printlnMeasureTimeMillis { input.part1().println() }
-        .also { println("time: $it") }
     val testInput2 = """
         T....#....
         ...T......
