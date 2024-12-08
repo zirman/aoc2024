@@ -48,7 +48,7 @@ fun main() {
             antennaGroup.combination(2).flatMap { (a, b) ->
                 antiNodes(a, b, size)
             }
-        }.toSet().size
+        }.countUnique()
     }
 
     fun Input8.part2(): Int {
@@ -57,7 +57,7 @@ fun main() {
             antennaGroup.combination(2).flatMap { (a, b) ->
                 antiNodes2(a, b, size)
             }
-        }.toSet().size
+        }.countUnique()
     }
 
     val testInput = """
