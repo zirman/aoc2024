@@ -1,3 +1,5 @@
+import kotlin.system.measureTimeMillis
+
 private typealias Input8 = List<String>
 
 private fun antinodes(pos1: Pos, pos2: Pos): List<Pos> = listOf(
@@ -11,6 +13,41 @@ private fun antinodes(pos1: Pos, pos2: Pos): List<Pos> = listOf(
     ),
 )
 
+private fun antinodes2(pos1: Pos, pos2: Pos, size: Size): List<Pos> = buildList {
+    var row = pos2.row - pos1.row
+    var col = pos2.col - pos1.col
+    var pos = Pos(
+        row = pos2.row + row,
+        col = pos2.col + col,
+    )
+    while (true) {
+        if (size.contains(pos).not()) {
+            break
+        }
+        add(pos)
+        pos = pos.copy(
+            row = pos.row + row,
+            col = pos.col + col,
+        )
+    }
+    row = pos1.row - pos2.row
+    col = pos1.col - pos2.col
+    pos = Pos(
+        row = pos1.row + row,
+        col = pos1.col + col,
+    )
+    while (true) {
+        if (size.contains(pos).not()) {
+            break
+        }
+        add(pos)
+        pos = pos.copy(
+            row = pos.row + row,
+            col = pos.col + col,
+        )
+    }
+}
+
 fun Size.contains(pos: Pos): Boolean {
     return pos.row >= 0 && pos.row < height && pos.col >= 0 && pos.col < width
 }
@@ -22,7 +59,6 @@ fun main() {
 
     fun Input8.part1(): Int {
         val size = Size(width = this[0].length, height = this.size)
-        println(size)
         val freqs =
             map { line -> line.filter { it != '.' && it != '#' }.toSet() }.fold(emptySet<Char>()) { a, b -> a + b }
         var nodes = 0
@@ -39,12 +75,28 @@ fun main() {
                 antinodes(a, b).filter { size.contains(it) }
             }
         }.toSet().count()
-        println(nodes)
         return nodes
     }
 
     fun Input8.part2(): Int {
-        TODO()
+        val size = Size(width = this[0].length, height = this.size)
+        val freqs =
+            map { line -> line.filter { it != '.' && it != '#' }.toSet() }.fold(emptySet<Char>()) { a, b -> a + b }
+        var nodes = 0
+        val locations = freqs.associate { freq ->
+            Pair(
+                freq,
+                mapIndexed { row, string ->
+                    string.mapIndexedNotNull { col, ch -> if (ch == freq) Pos(row, col) else null }
+                }.fold(emptySet<Pos>()) { acc, pos -> acc + pos },
+            )
+        }
+        nodes = locations.flatMap { (freq, locations) ->
+            locations.toList().combination(2).flatMap { (a, b) ->
+                antinodes2(a, b, size) + a + b
+            }
+        }.toSet().count()
+        return nodes
     }
 
     val testInput = """
@@ -63,7 +115,21 @@ fun main() {
     """.trimIndent().split('\n').parse()
     check(testInput.part1() == 14)
     val input = readInput("Day08").parse()
-    input.part1().println()
-//    check(testInput.part2() == 4)
-//    input.part2().println()
+    measureTimeMillis { input.part1().println() }
+        .also { println("time: $it") }
+    val testInput2 = """
+        T....#....
+        ...T......
+        .T....#...
+        .........#
+        ..#.......
+        ..........
+        ...#......
+        ..........
+        ....#.....
+        ..........
+    """.trimIndent().split('\n').parse()
+    check(testInput2.part2() == 9)
+    measureTimeMillis { input.part2().println() }
+        .also { println("time: $it") }
 }
