@@ -2,9 +2,6 @@ import kotlin.system.measureTimeMillis
 
 private typealias Input6 = Triple<Pos, Set<Pos>, Size>
 
-data class Pos(val row: Int, val col: Int)
-data class Size(val width: Int, val height: Int)
-
 fun Pos.goWest(): Pos = copy(col = col - 1)
 fun Pos.goEast(): Pos = copy(col = col + 1)
 fun Pos.goNorth(): Pos = copy(row = row - 1)

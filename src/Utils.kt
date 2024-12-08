@@ -20,6 +20,15 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println() = println(this)
 
+data class Pos(val row: Int, val col: Int)
+data class Size(val width: Int, val height: Int)
+
+fun List<String>.toSize(): Size = Size(width = this[0].length, height = this.size)
+
+fun Size.contains(pos: Pos): Boolean =
+    pos.row >= 0 && pos.row < height &&
+            pos.col >= 0 && pos.col < width
+
 fun <T> List<T>.dropAt(index: Int): List<T> = filterIndexed { i, t -> index != i }
 
 fun <T> List<T>.permutation(prefix: List<T> = emptyList()): List<List<T>> {
