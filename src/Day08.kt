@@ -14,7 +14,7 @@ fun main() {
             var pos = pos2 + diff
             add(pos2)
             while (true) {
-                if ((pos in this@antiNodesOf2).not()) {
+                if (pos !in this@antiNodesOf2) {
                     break
                 }
                 add(pos)
