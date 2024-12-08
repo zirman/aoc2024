@@ -23,8 +23,8 @@ fun main() {
                 pos += diff
             }
         }
-        addAntiNodes(pos2, pos1)
         addAntiNodes(pos1, pos2)
+        addAntiNodes(pos2, pos1)
     }
 
     fun List<String>.parse(): Input8 {
