@@ -3,12 +3,12 @@ import kotlin.system.measureTimeMillis
 private typealias Input8 = Pair<List<List<Pos>>, Size>
 
 fun main() {
-    fun Size.antiNodes(pos1: Pos, pos2: Pos): List<Pos> = listOf(
+    fun Size.antiNodesOf(pos1: Pos, pos2: Pos): List<Pos> = listOf(
         pos2 + (pos2 - pos1),
         pos1 + (pos1 - pos2),
     ).filter { it in this }
 
-    fun Size.antiNodes2(pos1: Pos, pos2: Pos): List<Pos> = buildList {
+    fun Size.antiNodesOf2(pos1: Pos, pos2: Pos): List<Pos> = buildList {
         add(pos1)
         add(pos2)
         var diff = pos2 - pos1
@@ -46,7 +46,7 @@ fun main() {
         val (antennaGroups, size) = this
         return antennaGroups.flatMap { antennaGroup ->
             antennaGroup.combination(2).flatMap { (a, b) ->
-                size.antiNodes(a, b)
+                size.antiNodesOf(a, b)
             }
         }.countUnique()
     }
@@ -55,7 +55,7 @@ fun main() {
         val (antennaGroups, size) = this
         return antennaGroups.flatMap { antennaGroup ->
             antennaGroup.combination(2).flatMap { (a, b) ->
-                size.antiNodes2(a, b)
+                size.antiNodesOf2(a, b)
             }
         }.countUnique()
     }
