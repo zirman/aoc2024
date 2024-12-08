@@ -1,6 +1,8 @@
 import kotlin.system.measureTimeMillis
 
-private typealias Input8 = Pair<List<List<Pos>>, Size>
+private typealias Input8 = AntennaData
+
+private data class AntennaData(val antennaGroups: List<List<Pos>>, val size: Size)
 
 fun main() {
     fun Size.antiNodesOf(pos1: Pos, pos2: Pos): List<Pos> = listOf(
@@ -33,17 +35,14 @@ fun main() {
                     line.mapIndexedNotNull { col, f -> if (f == frequency) Pos(row, col) else null }
                 }
             }
-        return Pair(antennaGroup, toSize())
+        return AntennaData(antennaGroup, toSize())
     }
 
-    fun Input8.part1(): Int {
-        val (antennaGroups, size) = this
-        return antennaGroups.flatMap { antennaGroup ->
-            antennaGroup.combination(2).flatMap { (a, b) ->
-                size.antiNodesOf(a, b)
-            }
-        }.countUnique()
-    }
+    fun Input8.part1(): Int = antennaGroups.flatMap { antennaGroup ->
+        antennaGroup.combination(2).flatMap { (a, b) ->
+            size.antiNodesOf(a, b)
+        }
+    }.countUnique()
 
     fun Input8.part2(): Int {
         val (antennaGroups, size) = this
