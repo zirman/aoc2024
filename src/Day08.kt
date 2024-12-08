@@ -3,7 +3,7 @@ import kotlin.system.measureTimeMillis
 private typealias Input8 = Pair<List<List<Pos>>, Size>
 
 fun main() {
-    fun antiNodes(pos1: Pos, pos2: Pos): List<Pos> = listOf(
+    fun antiNodes(pos1: Pos, pos2: Pos, size: Size): List<Pos> = listOf(
         Pos(
             row = pos2.row + (pos2.row - pos1.row),
             col = pos2.col + (pos2.col - pos1.col),
@@ -12,7 +12,7 @@ fun main() {
             row = pos1.row + (pos1.row - pos2.row),
             col = pos1.col + (pos1.col - pos2.col),
         ),
-    )
+    ).filter { pos -> size.contains(pos) }
 
     fun antiNodes2(pos1: Pos, pos2: Pos, size: Size): List<Pos> = buildList {
         var row = pos2.row - pos1.row
@@ -21,6 +21,7 @@ fun main() {
             row = pos2.row + row,
             col = pos2.col + col,
         )
+        add(pos1)
         while (true) {
             if (size.contains(pos).not()) {
                 break
@@ -37,6 +38,7 @@ fun main() {
             row = pos1.row + row,
             col = pos1.col + col,
         )
+        add(pos2)
         while (true) {
             if (size.contains(pos).not()) {
                 break
@@ -64,18 +66,18 @@ fun main() {
         val (antennaGroups, size) = this
         return antennaGroups.flatMap { antennaGroup ->
             antennaGroup.combination(2).flatMap { (a, b) ->
-                antiNodes(a, b).filter { size.contains(it) }
+                antiNodes(a, b, size)
             }
-        }.toSet().count()
+        }.toSet().size
     }
 
     fun Input8.part2(): Int {
         val (antennaGroups, size) = this
         return antennaGroups.flatMap { antennaGroup ->
             antennaGroup.combination(2).flatMap { (a, b) ->
-                antiNodes2(a, b, size) + a + b
+                antiNodes2(a, b, size)
             }
-        }.toSet().count()
+        }.toSet().size
     }
 
     val testInput = """
