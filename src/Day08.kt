@@ -1,5 +1,3 @@
-import kotlin.system.measureTimeMillis
-
 private typealias Input8 = AntennaData
 
 private data class AntennaData(val antennaGroups: List<List<Pos>>, val size: Size)
@@ -70,7 +68,7 @@ fun main() {
     """.trimIndent().split('\n').parse()
     check(testInput.part1() == 14)
     val input = readInput("Day08").parse()
-    measureTimeMillis { input.part1().println() }
+    printlnMeasureTimeMillis { input.part1().println() }
         .also { println("time: $it") }
     val testInput2 = """
         T....#....
@@ -85,6 +83,5 @@ fun main() {
         ..........
     """.trimIndent().split('\n').parse()
     check(testInput2.part2() == 9)
-    measureTimeMillis { input.part2().println() }
-        .also { println("time: $it") }
+    printlnMeasureTimeMillis { input.part2().println() }
 }
