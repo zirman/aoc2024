@@ -42,7 +42,7 @@ fun main() {
                 size.antiNodesOf(a, b)
             }
         }
-        .countUnique()
+        .distinct().size
 
     fun Input8.part2(): Int = antennaGroups
         .flatMap { antennaGroup ->
@@ -50,7 +50,7 @@ fun main() {
                 size.antiNodesOf2(a, b)
             }
         }
-        .countUnique()
+        .distinct().size
 
     val testInput = """
         ......#....#

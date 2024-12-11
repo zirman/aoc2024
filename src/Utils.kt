@@ -45,8 +45,6 @@ operator fun Size.contains(pos: Pos): Boolean =
 
 fun <T> List<T>.dropAt(index: Int): List<T> = filterIndexed { i, t -> index != i }
 
-fun <T> Iterable<T>.countUnique(): Int = toSet().size
-
 fun <T> List<T>.permutations(prefix: List<T> = emptyList()): List<List<T>> {
     if (isEmpty()) {
         return listOf(prefix)
