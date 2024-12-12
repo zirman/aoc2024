@@ -1,26 +1,39 @@
 private typealias Input11 = String
 
+fun Long.split(digits: Int, base: Int = 10): Pair<Long, Long> {
+    var right = 0L
+    var left = this
+    var shift = 1
+    for (i in 1..digits) {
+        right += (left % base) * shift
+        left /= base
+        shift *= base
+    }
+    return Pair(left, right)
+}
+
 fun main() {
     fun Input11.blinkTimes(blinks: Int): Long {
-        val regex = """^0*([1-9][0-9]*|0)$""".toRegex()
-        val memo = mutableMapOf<Pair<String, Int>, Long>()
-        val recur = DeepRecursiveFunction<Pair<String, Int>, Long> { stoneBlinks ->
+        val memo = mutableMapOf<Pair<Long, Int>, Long>()
+        val recur = DeepRecursiveFunction<Pair<Long, Int>, Long> { stoneBlinks ->
             memo.getOrPut(stoneBlinks) {
                 val (stone, blinks) = stoneBlinks
-                if (blinks == 0) {
-                    1
-                } else if (stone == "0") {
-                    callRecursive(Pair("1", blinks - 1))
-                } else if (stone.length % 2 == 0) {
-                    val (a) = regex.matchEntire(stone.substring(stone.length / 2))!!.destructured
-                    callRecursive(Pair(stone.substring(0..<stone.length / 2), blinks - 1)) +
-                            callRecursive(Pair(a, blinks - 1))
-                } else {
-                    callRecursive(Pair((stone.toLong() * 2024).toString(), blinks - 1))
+                when {
+                    blinks == 0 -> 1
+                    stone == 0L -> callRecursive(Pair(1, blinks - 1))
+                    else -> {
+                        val digits = stone.countDigits()
+                        if (digits % 2 == 0) {
+                            val (left, right) = stone.split(digits / 2)
+                            callRecursive(Pair(left, blinks - 1)) + callRecursive(Pair(right, blinks - 1))
+                        } else {
+                            callRecursive(Pair(stone * 2024, blinks - 1))
+                        }
+                    }
                 }
             }
         }
-        return split(' ').sumOf { recur(Pair(it, blinks)) }
+        return split(' ').map { it.toLong() }.sumOf { recur(Pair(it, blinks)) }
     }
 
     fun Input11.part1(): Long = blinkTimes(25)

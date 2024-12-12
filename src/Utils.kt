@@ -80,3 +80,15 @@ fun <T> List<T>.combinations(size: Int): List<List<T>> {
         recur(0, emptyList())
     }
 }
+
+fun Long.countDigits(base: Int = 10): Int {
+    var n = this
+    var i = 0
+    while (true) {
+        n /= base
+        i++
+        if (n == 0L) {
+            return i
+        }
+    }
+}
