@@ -1,27 +1,25 @@
 fun main() {
     val buttonRegex = """Button [A-Z]: X\+(\d+), Y\+(\d+)""".toRegex()
     val prizeRegex = """Prize: X=(\d+), Y=(\d+)""".toRegex()
-    fun List<String>.part1(offset: Long): Long {
-        return mapNotNull { line ->
-            val (a, b, p) = line.split("\n")
-            val (axs, ays) = buttonRegex.matchEntire(a)!!.destructured
-            val (bxs, bys) = buttonRegex.matchEntire(b)!!.destructured
-            val (pxs, pys) = prizeRegex.matchEntire(p)!!.destructured
-            val ax = axs.toLong()
-            val ay = ays.toLong()
-            val bx = bxs.toLong()
-            val by = bys.toLong()
-            val px = pxs.toLong() + offset
-            val py = pys.toLong() + offset
+    fun List<String>.part1(offset: Long): Long = sumOf { line ->
+        val (a, b, p) = line.split("\n")
+        val (axs, ays) = buttonRegex.matchEntire(a)!!.destructured
+        val (bxs, bys) = buttonRegex.matchEntire(b)!!.destructured
+        val (pxs, pys) = prizeRegex.matchEntire(p)!!.destructured
+        val ax = axs.toLong()
+        val ay = ays.toLong()
+        val bx = bxs.toLong()
+        val by = bys.toLong()
+        val px = pxs.toLong() + offset
+        val py = pys.toLong() + offset
 
-            if ((py * bx - px * by) % (ay * bx - ax * by) == 0L &&
-                (py * ax - px * ay) % (by * ax - bx * ay) == 0L
-            ) {
-                3 * ((py * bx - px * by) / (ay * bx - ax * by)) + (py * ax - px * ay) / (by * ax - bx * ay)
-            } else {
-                null
-            }
-        }.sum()
+        val bxay = bx * ay
+        val byax = by * ax
+        val an = py * bx - px * by
+        val ad = bxay - byax
+        val bn = py * ax - px * ay
+        val bd = byax - bxay
+        if (an % ad == 0L && bn % bd == 0L) (3 * (an / ad)) + (bn / bd) else 0
     }
 
     val testInput = """
