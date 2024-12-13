@@ -62,10 +62,6 @@ fun List<String>.countCorners(): Int {
             ) {
                 corner++
             }
-        }
-    }
-    indices.forEach { row ->
-        this[row].indices.forEach { index ->
             if (
                 mobius.any { regex ->
                     regex.indices.all { i ->
@@ -148,7 +144,7 @@ fun main() {
             this[row].indices.forEach { col ->
                 val p = Pos(row, col)
                 if (p !in visited) {
-                    val (v, x) = foo(Triple(this[row][col], p, emptySet()))
+                    val (v, _) = foo(Triple(this[row][col], p, emptySet()))
                     val q = v.toGroup().countCorners()
                     count += q * v.size
                     visited += v
@@ -172,7 +168,7 @@ fun main() {
     """.trimIndent().split('\n').parse()
     check(testInput.part1() == 1930)
     val input = readInput("Day12").parse()
-    input.part1().println()
+    printlnMeasureTimeMillis { input.part1().println() }
     check(testInput.part2() == 1206)
     check(
         """
@@ -210,5 +206,5 @@ fun main() {
             AAAAAA
         """.trimIndent().split('\n').parse().part2() == 368
     )
-    input.part2().println()
+    printlnMeasureTimeMillis { input.part2().println() }
 }

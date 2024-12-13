@@ -1,23 +1,48 @@
-private typealias Input13 = List<String>
-
 fun main() {
-    fun List<String>.parse(): Input13 {
-        return this
-    }
+    val buttonRegex = """Button [A-Z]: X\+(\d+), Y\+(\d+)""".toRegex()
+    val prizeRegex = """Prize: X=(\d+), Y=(\d+)""".toRegex()
+    fun List<String>.part1(offset: Long): Long {
+        return mapNotNull { line ->
+            val (a, b, p) = line.split("\n")
+            val (axs, ays) = buttonRegex.matchEntire(a)!!.destructured
+            val (bxs, bys) = buttonRegex.matchEntire(b)!!.destructured
+            val (pxs, pys) = prizeRegex.matchEntire(p)!!.destructured
+            val ax = axs.toLong()
+            val ay = ays.toLong()
+            val bx = bxs.toLong()
+            val by = bys.toLong()
+            val px = pxs.toLong() + offset
+            val py = pys.toLong() + offset
 
-    fun Input13.part1(): Int {
-        TODO()
-    }
-
-    fun Input13.part2(): Int {
-        TODO()
+            if ((py * bx - px * by) % (ay * bx - ax * by) == 0L &&
+                (py * ax - px * ay) % (by * ax - bx * ay) == 0L
+            ) {
+                3 * ((py * bx - px * by) / (ay * bx - ax * by)) + (py * ax - px * ay) / (by * ax - bx * ay)
+            } else {
+                null
+            }
+        }.sum()
     }
 
     val testInput = """
-    """.trimIndent().split('\n').parse()
-    check(testInput.part1() == TODO())
-    val input = readInput("Day13").parse()
-    input.part1().println()
-//    check(testInput.part2() == 4)
-//    input.part2().println()
+        Button A: X+94, Y+34
+        Button B: X+22, Y+67
+        Prize: X=8400, Y=5400
+
+        Button A: X+26, Y+66
+        Button B: X+67, Y+21
+        Prize: X=12748, Y=12176
+
+        Button A: X+17, Y+86
+        Button B: X+84, Y+37
+        Prize: X=7870, Y=6450
+
+        Button A: X+69, Y+23
+        Button B: X+27, Y+71
+        Prize: X=18641, Y=10279
+    """.trimIndent().split("\n\n")
+    check(testInput.part1(0) == 480L)
+    val input = readInput("Day13").joinToString("\n").split("\n\n")
+    printlnMeasureTimeMillis { input.part1(0).println() }
+    printlnMeasureTimeMillis { input.part1(10000000000000).println() }
 }
