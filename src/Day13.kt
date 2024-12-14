@@ -1,3 +1,4 @@
+
 fun main() {
     val buttonRegex = """Button [A-Z]: X\+(\d+), Y\+(\d+)""".toRegex()
     val prizeRegex = """Prize: X=(\d+), Y=(\d+)""".toRegex()
@@ -19,7 +20,7 @@ fun main() {
         val ad = bxay - byax
         val bn = py * ax - px * ay
         val bd = byax - bxay
-        if (an % ad == 0L && bn % bd == 0L) (3 * (an / ad)) + (bn / bd) else 0
+        3 * an.evenDivOrZero(ad) + bn.evenDivOrZero(bd)
     }
 
     val testInput = """
