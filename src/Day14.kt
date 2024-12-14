@@ -63,23 +63,12 @@ fun main() {
     }
 
     fun Input14.part2(size: Size): Int {
-        val robotsVisited = mutableSetOf<List<Pos>>()
-        var bestRobots: List<Pos> = emptyList()
-        var bestRobotsI = -1
-        var bestRobotsReached = Int.MAX_VALUE
         for (i in 1..Int.MAX_VALUE) {
             val robots = atTime(size, i)
-            val robotsReached = robots.reachRobots(size)
-            if (robotsReached < bestRobotsReached) {
-                bestRobotsReached = robotsReached
-                bestRobots = robots
-                bestRobotsI = i
+            if (robots.toSet().size == this@part2.size) {
+                robots.toString(size).println()
+                return i
             }
-            if (robots in robotsVisited) {
-                bestRobots.toString(size).println()
-                return bestRobotsI
-            }
-            robotsVisited += robots
         }
         throw IllegalStateException()
     }
@@ -100,6 +89,6 @@ fun main() {
     """.trimIndent().split('\n').parse()
     check(testInput.part1(Size(width = 11, height = 7), 100) == 12)
     val input = readInput("Day14").parse()
-    input.part1(Size(width = 101, height = 103), 100).println()
+    printlnMeasureTimeMillis { input.part1(Size(width = 101, height = 103), 100).println() }
     printlnMeasureTimeMillis { input.part2(Size(width = 101, height = 103)).println() }
 }
