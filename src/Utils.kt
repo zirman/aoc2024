@@ -37,6 +37,7 @@ operator fun Pos.plus(pos: Pos): Pos = Pos(
 )
 data class Size(val width: Int, val height: Int)
 
+fun <T> List<List<T>>.toSize2(): Size = Size(width = this[0].size, height = size)
 fun List<String>.toSize(): Size = Size(width = this[0].length, height = size)
 
 operator fun Size.contains(pos: Pos): Boolean =
