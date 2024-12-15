@@ -55,35 +55,14 @@ fun main() {
     fun Input15.part1(): Int {
         val (boxes, size, moves) = this
         fun Pos.push(move: Pos.() -> Pos): Boolean {
-            val s = move()
-            if (s in size) {
-//                boxes.stringify().println()
-                when (boxes[s.row][s.col]) {
-                    '.' -> {
-                        boxes[s.row][s.col] = boxes[row][col]
-                        boxes[row][col] = '.'
-                    }
-
-                    'O' -> {
-                        if (s.push(move)) {
-                            boxes[s.row][s.col] = boxes[row][col]
-                            boxes[row][col] = '.'
-                        } else {
-                            return false
-                        }
-                    }
-
-                    '#' -> {
-                        return false
-                    }
-
-                    else -> {
-                        throw IllegalStateException()
-                    }
-                }
-                return true
+            val p = move()
+            val c = boxes[p.row][p.col]
+            return if (c == '.' || (c == 'O' && p.push(move))) {
+                boxes[p.row][p.col] = boxes[row][col]
+                boxes[row][col] = '.'
+                true
             } else {
-                return false
+                false
             }
         }
 
