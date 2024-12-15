@@ -94,6 +94,7 @@ fun main() {
                 }
             }
         }
+        boxes.stringify().println()
         return boxes.gpsSum('O')
     }
 
@@ -103,7 +104,6 @@ fun main() {
             val p = move()
             return when (boxes[p.row][p.col]) {
                 '.' -> true
-                '@' -> p.canPushVertical(move)
                 '[' -> p.canPushVertical(move) && p.goEast().canPushVertical(move)
                 ']' -> p.canPushVertical(move) && p.goWest().canPushVertical(move)
                 '#' -> false
@@ -141,61 +141,38 @@ fun main() {
 
         fun Pos.pushHorizontal(move: Pos.() -> Pos): Boolean {
             val p = move()
-            return when (boxes[p.row][p.col]) {
-                '.' -> {
-                    boxes[p.row][p.col] = boxes[row][col]
-                    boxes[row][col] = '.'
-                    true
-                }
-
-                '@', '[', ']' -> {
-                    if (p.pushHorizontal(move)) {
-                        boxes[p.row][p.col] = boxes[row][col]
-                        boxes[row][col] = '.'
-                        true
-                    } else {
-                        false
-                    }
-                }
-
-                '#' -> {
-                    false
-                }
-
-                else -> {
-                    throw IllegalStateException()
-                }
+            val c = boxes[p.row][p.col]
+            return if (c == '.' || (c in "[]" && p.pushHorizontal(move))) {
+                boxes[p.row][p.col] = boxes[row][col]
+                boxes[row][col] = '.'
+                true
+            } else {
+                false
             }
         }
 
         var pos = boxes.startingPosition(size)
         for (dir in moves) {
             when (dir) {
-                '<' -> {
-                    if (pos.pushHorizontal { goWest() }) {
-                        pos = pos.goWest()
-                    }
+                '<' -> if (pos.pushHorizontal { goWest() }) {
+                    pos = pos.goWest()
                 }
 
-                '>' -> {
-                    if (pos.pushHorizontal { goEast() }) {
-                        pos = pos.goEast()
-                    }
+                '>' -> if (pos.pushHorizontal { goEast() }) {
+                    pos = pos.goEast()
                 }
 
-                'v' -> {
-                    if (pos.canPushVertical { goSouth() }) {
-                        pos.pushVertical { goSouth() }
-                        pos = pos.goSouth()
-                    }
+                'v' -> if (pos.canPushVertical { goSouth() }) {
+                    pos.pushVertical { goSouth() }
+                    pos = pos.goSouth()
                 }
 
-                '^' -> {
-                    if (pos.canPushVertical { goNorth() }) {
-                        pos.pushVertical { goNorth() }
-                        pos = pos.goNorth()
-                    }
+                '^' -> if (pos.canPushVertical { goNorth() }) {
+                    pos.pushVertical { goNorth() }
+                    pos = pos.goNorth()
                 }
+
+                else -> throw IllegalStateException()
             }
         }
         boxes.stringify().println()
@@ -240,7 +217,7 @@ fun main() {
     """.trimIndent()
     check(testInput2.parse1().part1() == 10092)
     val input = readInput("Day15").joinToString("\n")
-    printlnMeasureTimeMillis { input.parse1().part1().println() }
+    printlnMeasureTimeMillis { println("part 1: ${input.parse1().part1()}") }
     check(testInput2.parse2().part2() == 9021)
-    printlnMeasureTimeMillis { input.parse2().part2().println() }
+    printlnMeasureTimeMillis { println("part 2: ${input.parse2().part2()}") }
 }
