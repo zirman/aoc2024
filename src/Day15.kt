@@ -99,219 +99,106 @@ fun main() {
 
     fun Input15.part2(): Int {
         val (boxes, size, moves) = this
-        var pos = boxes.startingPosition(size)
-        for (dir in moves) {
-//            boxes.stringify().println()
-            when (dir) {
-                'v' -> {
-                    fun Pos.canMove(): Boolean {
-                        val s = goSouth()
-                        if (s in size) {
-                            when (boxes[s.row][s.col]) {
-                                '.' -> {
-                                    return true
-                                }
+        fun Pos.canPushVertical(move: Pos.() -> Pos): Boolean {
+            val p = move()
+            return when (boxes[p.row][p.col]) {
+                '.' -> true
+                '@' -> p.canPushVertical(move)
+                '[' -> p.canPushVertical(move) && p.goEast().canPushVertical(move)
+                ']' -> p.canPushVertical(move) && p.goWest().canPushVertical(move)
+                '#' -> false
+                else -> throw IllegalStateException()
+            }
+        }
 
-                                '[' -> {
-                                    return s.canMove() && s.goEast().canMove()
-                                }
+        fun Pos.pushVertical(move: Pos.() -> Pos) {
+            val p = move()
+            when (boxes[p.row][p.col]) {
+                '.' -> {
+                    boxes[p.row][p.col] = boxes[row][col]
+                    boxes[row][col] = '.'
+                }
 
-                                ']' -> {
-                                    return s.canMove() && s.goWest().canMove()
-                                }
+                '[' -> {
+                    p.pushVertical(move)
+                    p.goEast().pushVertical(move)
+                    boxes[p.row][p.col] = boxes[row][col]
+                    boxes[row][col] = '.'
+                }
 
-                                '#' -> {
-                                    return false
-                                }
+                ']' -> {
+                    p.pushVertical(move)
+                    p.goWest().pushVertical(move)
+                    boxes[p.row][p.col] = boxes[row][col]
+                    boxes[row][col] = '.'
+                }
 
-                                else -> {
-                                    throw IllegalStateException()
-                                }
-                            }
-                            return true
-                        } else {
-                            return false
-                        }
-                    }
+                else -> {
+                    throw IllegalStateException()
+                }
+            }
+        }
 
-                    fun Pos.move() {
-                        val p = goSouth()
-                        when (boxes[p.row][p.col]) {
-                            '.' -> {
-                                boxes[p.row][p.col] = boxes[row][col]
-                                boxes[row][col] = '.'
-                            }
+        fun Pos.pushHorizontal(move: Pos.() -> Pos): Boolean {
+            val p = move()
+            return when (boxes[p.row][p.col]) {
+                '.' -> {
+                    boxes[p.row][p.col] = boxes[row][col]
+                    boxes[row][col] = '.'
+                    true
+                }
 
-                            '[' -> {
-                                p.move()
-                                boxes[p.row][p.col] = boxes[row][col]
-                                boxes[row][col] = '.'
-                                p.goEast().move()
-                            }
-
-                            ']' -> {
-                                p.move()
-                                boxes[p.row][p.col] = boxes[row][col]
-                                boxes[row][col] = '.'
-                                p.goWest().move()
-                            }
-
-                            '#' -> {
-                            }
-
-                            else -> {
-                                throw IllegalStateException()
-                            }
-                        }
-                    }
-                    if (pos.canMove()) {
-                        pos.move()
-                        pos = pos.goSouth()
+                '@', '[', ']' -> {
+                    if (p.pushHorizontal(move)) {
+                        boxes[p.row][p.col] = boxes[row][col]
+                        boxes[row][col] = '.'
+                        true
+                    } else {
+                        false
                     }
                 }
 
+                '#' -> {
+                    false
+                }
+
+                else -> {
+                    throw IllegalStateException()
+                }
+            }
+        }
+
+        var pos = boxes.startingPosition(size)
+        for (dir in moves) {
+            when (dir) {
                 '<' -> {
-                    fun Pos.push(): Boolean {
-                        val p = goWest()
-                        if (p in size) {
-                            when (boxes[p.row][p.col]) {
-                                '.' -> {
-                                    boxes[p.row][p.col] = boxes[row][col]
-                                    boxes[row][col] = '.'
-                                }
-
-                                '[', ']' -> {
-                                    if (p.push()) {
-                                        boxes[p.row][p.col] = boxes[row][col]
-                                        boxes[row][col] = '.'
-                                    } else {
-                                        return false
-                                    }
-                                }
-
-                                '#' -> {
-                                    return false
-                                }
-
-                                else -> {
-                                    throw IllegalStateException()
-                                }
-                            }
-                            return true
-                        } else {
-                            return false
-                        }
-                    }
-                    if (pos.push()) {
+                    if (pos.pushHorizontal { goWest() }) {
                         pos = pos.goWest()
                     }
                 }
 
                 '>' -> {
-                    fun Pos.push(): Boolean {
-                        val p = goEast()
-                        if (p in size) {
-                            when (boxes[p.row][p.col]) {
-                                '.' -> {
-                                    boxes[p.row][p.col] = boxes[row][col]
-                                    boxes[row][col] = '.'
-                                }
-
-                                '[', ']' -> {
-                                    if (p.push()) {
-                                        boxes[p.row][p.col] = boxes[row][col]
-                                        boxes[row][col] = '.'
-                                    } else {
-                                        return false
-                                    }
-                                }
-
-                                '#' -> {
-                                    return false
-                                }
-
-                                else -> {
-                                    throw IllegalStateException()
-                                }
-                            }
-                            return true
-                        } else {
-                            return false
-                        }
-                    }
-                    if (pos.push()) {
+                    if (pos.pushHorizontal { goEast() }) {
                         pos = pos.goEast()
                     }
                 }
 
+                'v' -> {
+                    if (pos.canPushVertical { goSouth() }) {
+                        pos.pushVertical { goSouth() }
+                        pos = pos.goSouth()
+                    }
+                }
+
                 '^' -> {
-                    fun Pos.canMove(): Boolean {
-                        val s = goNorth()
-                        if (s in size) {
-                            when (boxes[s.row][s.col]) {
-                                '.' -> {
-                                    return true
-                                }
-
-                                '[' -> {
-                                    return s.canMove() && s.goEast().canMove()
-                                }
-
-                                ']' -> {
-                                    return s.canMove() && s.goWest().canMove()
-                                }
-
-                                '#' -> {
-                                    return false
-                                }
-
-                                else -> {
-                                    throw IllegalStateException()
-                                }
-                            }
-                            return true
-                        } else {
-                            return false
-                        }
-                    }
-
-                    fun Pos.move() {
-                        val p = goNorth()
-                        when (boxes[p.row][p.col]) {
-                            '.' -> {
-                                boxes[p.row][p.col] = boxes[row][col]
-                                boxes[row][col] = '.'
-                            }
-
-                            '[' -> {
-                                p.move()
-                                boxes[p.row][p.col] = boxes[row][col]
-                                boxes[row][col] = '.'
-                                p.goEast().move()
-                            }
-
-                            ']' -> {
-                                p.move()
-                                boxes[p.row][p.col] = boxes[row][col]
-                                boxes[row][col] = '.'
-                                p.goWest().move()
-                            }
-
-                            '#' -> {
-                            }
-
-                            else -> {
-                                throw IllegalStateException()
-                            }
-                        }
-                    }
-                    if (pos.canMove()) {
-                        pos.move()
+                    if (pos.canPushVertical { goNorth() }) {
+                        pos.pushVertical { goNorth() }
                         pos = pos.goNorth()
                     }
                 }
             }
         }
+        boxes.stringify().println()
         return boxes.gpsSum('[')
     }
 
