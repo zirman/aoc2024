@@ -45,7 +45,7 @@ fun main() {
                     }
 
                     2 -> { // bst
-                        b = combo(insts[ip + 1]).mod(8)
+                        b = combo(insts[ip + 1]) and 0b111
                         ip += 2
                     }
 
@@ -63,7 +63,7 @@ fun main() {
                     }
 
                     5 -> { // out
-                        add(combo(insts[ip + 1]).mod(8))
+                        add(combo(insts[ip + 1]) and 0b111)
                         ip += 2
                     }
 
@@ -81,48 +81,55 @@ fun main() {
         }
     }
 
-    fun Input17.part2(): Int {
-        for (a in a..Int.MAX_VALUE) {
-            if (copy(a = a).part1() == insts) {
-                return a
-            }
-        }
-        throw IllegalStateException()
-    }
-
-    fun Input17.part3(): Long {
+    fun Input17.part2(): Long {
         val insts = insts.map { it.toLong() }
-        for (a in 0..Long.MAX_VALUE) {
-            if (a % 100_000_000 == 0L) println(a)
-            var i = 0
-            var a = a.toLong()
-            var b = b.toLong()
-            var c = c.toLong()
-            while (true) {
-                //2, 4
-                b = a.mod(8L)
-                //1, 1
-                b = b xor 1
-                //7, 5
-                c = a shr b.toInt()
-                //4, 0
+
+        fun search(i: Long, a: Long, max: Long): Sequence<Long> = sequence {
+            for (n in 0L..max) {
+                var a = (a shl 3) + n
+                var b = a and 0b111
+                b = b xor 0b001
+                var c = a shr b.toInt()
                 b = b xor c
-                //0, 3
-                a = a shr 3
-                //1, 6
                 b = b xor 6
-                //5, 5
-                if (i !in insts.indices || b.mod(8L) != insts[i]) {
-                    break
-                }
-                i++
-                //3, 0
-                if (a == 0L && i == insts.size) {
-                    return a
+                b = b and 0b111
+                if (b == i) {
+                    yield(a)
                 }
             }
         }
-        throw IllegalStateException()
+
+        return search(insts[15], 0, Long.MAX_VALUE).flatMap {
+            search(insts[14], it, 7).flatMap {
+                search(insts[13], it, 7).flatMap {
+                    search(insts[12], it, 7).flatMap {
+                        search(insts[11], it, 7).flatMap {
+                            search(insts[10], it, 7).flatMap {
+                                search(insts[9], it, 7).flatMap {
+                                    search(insts[8], it, 7).flatMap {
+                                        search(insts[7], it, 7).flatMap {
+                                            search(insts[6], it, 7).flatMap {
+                                                search(insts[5], it, 7).flatMap {
+                                                    search(insts[4], it, 7).flatMap {
+                                                        search(insts[3], it, 7).flatMap {
+                                                            search(insts[2], it, 7).flatMap {
+                                                                search(insts[1], it, 7).flatMap {
+                                                                    search(insts[0], it, 7)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }.first()
     }
 
     val testInput1 = """
@@ -141,13 +148,5 @@ fun main() {
         Program: 2,4,1,1,7,5,4,0,0,3,1,6,5,5,3,0
     """.trimIndent().split('\n').parse()
     printlnMeasureTimeMillis { input.part1().println() }
-    val testInput2 = """
-        Register A: 117440
-        Register B: 0
-        Register C: 0
-
-        Program: 0,3,5,4,3,0
-    """.trimIndent().split('\n').parse()
-    check(testInput2.part2() == 117440)
-    printlnMeasureTimeMillis { input.part3().println() }
+    printlnMeasureTimeMillis { input.part2().println() }
 }
