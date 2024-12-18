@@ -16,34 +16,34 @@ fun main() {
     )
 
     fun Input18.part1(n: Int, size: Size): Int? {
-        val v = mutableMapOf<Pos, Int>()
-        val e = Pos(size.height - 1, size.width - 1)
-        val q = PriorityQueue<Pair<Pos, Int>>(
-            compareBy<Pair<Pos, Int>> { it.second }
-                .thenBy { e.manhattanDistance(it.first) },
+        val visited = mutableMapOf<Pos, Int>()
+        val end = Pos(size.height - 1, size.width - 1)
+        val queue = PriorityQueue<Pair<Pos, Int>>(
+            compareBy<Pair<Pos, Int>> { (pos, steps) -> steps },
         )
         val corrupted = take(n).toSet()
-        q.add(Pair(Pos(0, 0), 0))
-        v[Pos(0, 0)] = 0
-        while (q.isNotEmpty()) {
-            val (pos, steps) = q.remove()
-            if (pos == e) {
+        queue.add(Pair(Pos(0, 0), 0))
+        visited[Pos(0, 0)] = 0
+        while (queue.isNotEmpty()) {
+            val (pos, steps) = queue.remove()
+            if (pos == end) {
                 return steps
             }
+            val nextSteps = steps + 1
             pos
                 .next()
                 .filter { it in size && it !in corrupted }
                 .forEach { pos ->
-                    val s = v[pos]
-                    if (s != null) {
-                        if (steps + 1 < s) {
-                            q.remove(Pair(pos, s))
-                            q.add(Pair(pos, steps + 1))
-                            v[pos] = steps + 1
+                    val visitedSteps = visited[pos]
+                    if (visitedSteps != null) {
+                        if (nextSteps < visitedSteps) {
+                            queue.remove(Pair(pos, visitedSteps))
+                            queue.add(Pair(pos, nextSteps))
+                            visited[pos] = nextSteps
                         }
                     } else {
-                        q.add(Pair(pos, steps + 1))
-                        v[pos] = steps + 1
+                        queue.add(Pair(pos, nextSteps))
+                        visited[pos] = nextSteps
                     }
                 }
         }
