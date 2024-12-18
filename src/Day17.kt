@@ -101,33 +101,33 @@ fun main() {
 
         return search(insts[15], 0, Long.MAX_VALUE).flatMap {
             search(insts[14], it, 7).flatMap {
-                println(it)
+                println(it.toString(8))
                 search(insts[13], it, 7).flatMap {
-                    println(it)
+                    println(it.toString(8))
                     search(insts[12], it, 7).flatMap {
-                        println(it)
+                        println(it.toString(8))
                         search(insts[11], it, 7).flatMap {
-                            println(it)
+                            println(it.toString(8))
                             search(insts[10], it, 7).flatMap {
-                                println(it)
+                                println(it.toString(8))
                                 search(insts[9], it, 7).flatMap {
-                                    println(it)
+                                    println(it.toString(8))
                                     search(insts[8], it, 7).flatMap {
-                                        println(it)
+                                        println(it.toString(8))
                                         search(insts[7], it, 7).flatMap {
-                                            println(it)
+                                            println(it.toString(8))
                                             search(insts[6], it, 7).flatMap {
-                                                println(it)
+                                                println(it.toString(8))
                                                 search(insts[5], it, 7).flatMap {
-                                                    println(it)
+                                                    println(it.toString(8))
                                                     search(insts[4], it, 7).flatMap {
-                                                        println(it)
+                                                        println(it.toString(8))
                                                         search(insts[3], it, 7).flatMap {
-                                                            println(it)
+                                                            println(it.toString(8))
                                                             search(insts[2], it, 7).flatMap {
-                                                                println(it)
+                                                                println(it.toString(8))
                                                                 search(insts[1], it, 7).flatMap {
-                                                                    println(it)
+                                                                    println(it.toString(8))
                                                                     search(insts[0], it, 7)
                                                                 }
                                                             }
