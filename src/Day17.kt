@@ -91,7 +91,7 @@ fun main() {
                 b = b xor 0b001
                 var c = a shr b.toInt()
                 b = b xor c
-                b = b xor 6
+                b = b xor 0b110
                 b = b and 0b111
                 if (b == i) {
                     yield(a)
@@ -101,19 +101,33 @@ fun main() {
 
         return search(insts[15], 0, Long.MAX_VALUE).flatMap {
             search(insts[14], it, 7).flatMap {
+                println(it)
                 search(insts[13], it, 7).flatMap {
+                    println(it)
                     search(insts[12], it, 7).flatMap {
+                        println(it)
                         search(insts[11], it, 7).flatMap {
+                            println(it)
                             search(insts[10], it, 7).flatMap {
+                                println(it)
                                 search(insts[9], it, 7).flatMap {
+                                    println(it)
                                     search(insts[8], it, 7).flatMap {
+                                        println(it)
                                         search(insts[7], it, 7).flatMap {
+                                            println(it)
                                             search(insts[6], it, 7).flatMap {
+                                                println(it)
                                                 search(insts[5], it, 7).flatMap {
+                                                    println(it)
                                                     search(insts[4], it, 7).flatMap {
+                                                        println(it)
                                                         search(insts[3], it, 7).flatMap {
+                                                            println(it)
                                                             search(insts[2], it, 7).flatMap {
+                                                                println(it)
                                                                 search(insts[1], it, 7).flatMap {
+                                                                    println(it)
                                                                     search(insts[0], it, 7)
                                                                 }
                                                             }
@@ -147,6 +161,6 @@ fun main() {
 
         Program: 2,4,1,1,7,5,4,0,0,3,1,6,5,5,3,0
     """.trimIndent().split('\n').parse()
-    printlnMeasureTimeMillis { input.part1().println() }
-    printlnMeasureTimeMillis { input.part2().println() }
+    printlnMeasureTimeMillis { println("part1: ${input.part1().joinToString(",")}") }
+    printlnMeasureTimeMillis { println("part2: ${input.part2()}") }
 }
