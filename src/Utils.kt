@@ -2,6 +2,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.math.absoluteValue
 import kotlin.system.measureTimeMillis
 
 /**
@@ -27,14 +28,18 @@ fun printlnMeasureTimeMillis(block: () -> Unit) {
 }
 
 data class Pos(val row: Int, val col: Int)
+
 operator fun Pos.minus(pos: Pos): Pos = Pos(
     row - pos.row,
     col - pos.col,
 )
+
 operator fun Pos.plus(pos: Pos): Pos = Pos(
     row + pos.row,
     col + pos.col,
 )
+
+fun Pos.manhattanDistance(pos: Pos): Int = (row - pos.row).absoluteValue + (col - pos.col).absoluteValue
 data class Size(val width: Int, val height: Int)
 
 fun <T> List<List<T>>.toSize2(): Size = Size(width = this[0].size, height = size)
