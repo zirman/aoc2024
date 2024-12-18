@@ -100,6 +100,7 @@ fun main() {
         }
 
         return search(insts[15], 0, Long.MAX_VALUE).flatMap {
+            println(it.toString(8))
             search(insts[14], it, 7).flatMap {
                 println(it.toString(8))
                 search(insts[13], it, 7).flatMap {
