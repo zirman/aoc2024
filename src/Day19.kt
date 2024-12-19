@@ -12,24 +12,22 @@ fun main() {
     fun Input19.part1(): Int {
         val (towels, patterns) = this
         val memo = mutableMapOf<String, Boolean>()
-        return patterns.filter { pattern ->
-            fun recur(pattern: String): Boolean {
-                return memo.getOrPut(pattern) {
-                    if (pattern.isEmpty()) {
-                        true
-                    } else {
-                        towels.any { towel ->
-                            if (pattern.startsWith(towel)) {
-                                recur(pattern.substring(startIndex = towel.length))
-                            } else {
-                                false
-                            }
+        return patterns.count { pattern ->
+            fun recur(pattern: String): Boolean = memo.getOrPut(pattern) {
+                if (pattern.isEmpty()) {
+                    true
+                } else {
+                    towels.any { towel ->
+                        if (pattern.startsWith(towel)) {
+                            recur(pattern.substring(startIndex = towel.length))
+                        } else {
+                            false
                         }
                     }
                 }
             }
             recur(pattern)
-        }.count()
+        }
     }
 
     fun Input19.part2(): Long {
