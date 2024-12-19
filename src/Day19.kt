@@ -11,43 +11,43 @@ fun main() {
 
     fun Input19.part1(): Int {
         val (towels, patterns) = this
-        val memo = mutableMapOf<String, Boolean>()
         return patterns.count { pattern ->
-            fun recur(pattern: String): Boolean = memo.getOrPut(pattern) {
-                if (pattern.isEmpty()) {
+            val memo = mutableMapOf<Int, Boolean>()
+            fun recur(index: Int): Boolean = memo.getOrPut(index) {
+                if (index >= pattern.length) {
                     true
                 } else {
                     towels.any { towel ->
-                        if (pattern.startsWith(towel)) {
-                            recur(pattern.substring(startIndex = towel.length))
+                        if (pattern.startsWith(towel, index)) {
+                            recur(index + towel.length)
                         } else {
                             false
                         }
                     }
                 }
             }
-            recur(pattern)
+            recur(0)
         }
     }
 
     fun Input19.part2(): Long {
         val (towels, patterns) = this
-        val memo = mutableMapOf<String, Long>()
         return patterns.sumOf { pattern ->
-            fun recur(pattern: String): Long = memo.getOrPut(pattern) {
-                if (pattern.isEmpty()) {
+            val memo = mutableMapOf<Int, Long>()
+            fun recur(index: Int): Long = memo.getOrPut(index) {
+                if (index >= pattern.length) {
                     1
                 } else {
                     towels.sumOf { towel ->
-                        if (pattern.startsWith(towel)) {
-                            recur(pattern.substring(startIndex = towel.length))
+                        if (pattern.startsWith(towel, index)) {
+                            recur(index + towel.length)
                         } else {
                             0
                         }
                     }
                 }
             }
-            recur(pattern)
+            recur(0)
         }
     }
 
