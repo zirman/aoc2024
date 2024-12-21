@@ -119,24 +119,68 @@ fun main() {
         return "".recur(0, Pos(0, 2))
     }
 
-    fun Input21.part1(): Long {
+    fun Input21.part1(): Long = sumOf { doorCode ->
+        doorCode.dialNumpadString().flatMap {
+            it.dialDirPadString().flatMap {
+                it.dialDirPadString()
+            }
+        }.minBy { it.length }.length * doorCode.dropLast(1).toLong()
+    }
+
+    fun Input21.part2(): Long {
         return sumOf { doorCode ->
             doorCode.dialNumpadString().flatMap {
                 it.dialDirPadString().flatMap {
-                    it.dialDirPadString()
+                    it.dialDirPadString().flatMap {
+                        it.dialDirPadString().flatMap {
+                            it.dialDirPadString().flatMap {
+                                it.dialDirPadString().flatMap {
+                                    it.dialDirPadString().flatMap {
+                                        it.dialDirPadString().flatMap {
+                                            it.dialDirPadString().flatMap {
+                                                it.dialDirPadString().flatMap {
+                                                    it.dialDirPadString().flatMap {
+                                                        it.dialDirPadString().flatMap {
+                                                            it.dialDirPadString().flatMap {
+                                                                it.dialDirPadString().flatMap {
+                                                                    it.dialDirPadString().flatMap {
+                                                                        it.dialDirPadString().flatMap {
+                                                                            it.dialDirPadString().flatMap {
+                                                                                it.dialDirPadString().flatMap {
+                                                                                    it.dialDirPadString().flatMap {
+                                                                                        it.dialDirPadString().flatMap {
+                                                                                            it.dialDirPadString().flatMap {
+                                                                                                it.dialDirPadString().flatMap {
+                                                                                                    it.dialDirPadString().flatMap {
+                                                                                                        it.dialDirPadString().flatMap {
+                                                                                                            it.dialDirPadString().flatMap {
+                                                                                                                it.dialDirPadString()
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-                .minBy { it.length }.length * doorCode.dropLast(1).toLong()
-//            doorCode.dialNumpadString().flatMap {
-//                it.dialDirPadString().flatMap {
-//                    it.dialDirPadString()
-//                }
-//            }.sumOf { doorCode.dropLast(1).toLong() * it.length }
+            }.minBy { it.length }.length * doorCode.dropLast(1).toLong()
         }
-    }
-
-    fun Input21.part2(): Int {
-        TODO()
     }
 
     fun List<List<Char>>.stringify(): String = joinToString("\n") { it.joinToString("") }
@@ -149,31 +193,6 @@ fun main() {
         """.trimIndent().split('\n')
     )
 
-    "029A".dialNumpadString().flatMap {
-        it.dialDirPadString().flatMap {
-            it.dialDirPadString()
-        }
-    }.minBy { it.length }.length.println()
-//    .sumOf {
-//        val x = it.length
-//        29L * x
-//    }.println()
-
-//    "029A".dialNumpadString().flatMap {
-//        it.dialDirPadString().flatMap {
-//            it.dialDirPadString()
-//        }
-//    }.map { it. }
-//    check(
-//        "029A".dialDirPadString().stringify() == """
-//            <A^A>^^AvvvA
-//        """.trimIndent()
-//    )
-
-//    val testInput = """
-//    """.trimIndent().split('\n')
-//    check(testInput.part1() == TODO())
-//
     val input = """
         140A
         143A
@@ -181,7 +200,6 @@ fun main() {
         582A
         964A
     """.trimIndent().split('\n')
-    input.part1().println()
-//    check(testInput.part2() == 4)
-//    input.part2().println()
+    printlnMeasureTimeMillis { println("part1: ${input.part1()}") }
+    printlnMeasureTimeMillis { println("part2: ${input.part2()}") }
 }
