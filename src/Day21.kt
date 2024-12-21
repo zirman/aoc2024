@@ -31,10 +31,10 @@ fun main() {
         Pos(3, 2) to 'A',
     )
 
-    val memoDialNumpadPos = mutableMapOf<Pair<Pos, Pos>, List<List<Char>>>()
-    fun Pos.dialNumpadPos(pos: Pos): List<List<Char>> = memoDialNumpadPos.getOrPut(Pair(this, pos)) {
+    val memoDialNumpadPos = mutableMapOf<Pair<Pos, Pos>, List<String>>()
+    fun Pos.dialNumpadPos(pos: Pos): List<String> = memoDialNumpadPos.getOrPut(Pair(this, pos)) {
         buildList {
-            fun Pos.recur(prefix: List<Char>) {
+            fun Pos.recur(prefix: String) {
                 if (this == pos) {
                     add(prefix + 'A')
                     return
@@ -52,19 +52,19 @@ fun main() {
                     goSouth().takeIf { it in numpadPosToChar }?.recur(prefix + 'v')
                 }
             }
-            recur(emptyList())
+            recur("")
         }
     }
 
-    fun String.dialNumpadString(): List<List<Char>> {
-        fun List<Char>.recur(index: Int, pos: Pos): List<List<Char>> {
+    fun String.dialNumpadString(): List<String> {
+        fun String.recur(index: Int, pos: Pos): List<String> {
             if (index !in this@dialNumpadString.indices) return listOf(this)
             val nextPos = numpadCharToPos[this@dialNumpadString[index]]!!
             return pos.dialNumpadPos(nextPos).flatMap { it ->
                 (this + it).recur(index + 1, numpadCharToPos[this@dialNumpadString[index]]!!)
             }
         }
-        return emptyList<Char>().recur(0, Pos(3, 2))
+        return "".recur(0, Pos(3, 2))
     }
 
     val dirPadCharToPos = mapOf(
@@ -83,10 +83,10 @@ fun main() {
         Pos(1, 2) to '>',
     )
 
-    val memoDialDirPadPos = mutableMapOf<Pair<Pos, Pos>, List<List<Char>>>()
-    fun Pos.dialDirPadPos(pos: Pos): List<List<Char>> = memoDialDirPadPos.getOrPut(Pair(this, pos)) {
+    val memoDialDirPadPos = mutableMapOf<Pair<Pos, Pos>, List<String>>()
+    fun Pos.dialDirPadPos(pos: Pos): List<String> = memoDialDirPadPos.getOrPut(Pair(this, pos)) {
         buildList {
-            fun Pos.recur(prefix: List<Char>) {
+            fun Pos.recur(prefix: String) {
                 if (this == pos) {
                     add(prefix + 'A')
                     return
@@ -104,26 +104,35 @@ fun main() {
                     goSouth().takeIf { it in dirPadPosToChar }?.recur(prefix + 'v')
                 }
             }
-            recur(emptyList())
+            recur("")
         }
     }
 
-    fun String.dialDirPadString(): List<List<Char>> {
-        fun List<Char>.recur(index: Int, pos: Pos): List<List<Char>> {
+    fun String.dialDirPadString(): List<String> {
+        fun String.recur(index: Int, pos: Pos): List<String> {
             if (index !in this@dialDirPadString.indices) return listOf(this)
             val nextPos = dirPadCharToPos[this@dialDirPadString[index]]!!
             return pos.dialDirPadPos(nextPos).flatMap { it ->
                 (this + it).recur(index + 1, dirPadCharToPos[this@dialDirPadString[index]]!!)
             }
         }
-        return emptyList<Char>().recur(0, Pos(0, 2))
+        return "".recur(0, Pos(0, 2))
     }
 
-    fun Input21.part1(): Int {
-        forEach { doorCode ->
-
+    fun Input21.part1(): Long {
+        return sumOf { doorCode ->
+            doorCode.dialNumpadString().flatMap {
+                it.dialDirPadString().flatMap {
+                    it.dialDirPadString()
+                }
+            }
+                .minBy { it.length }.length * doorCode.dropLast(1).toLong()
+//            doorCode.dialNumpadString().flatMap {
+//                it.dialDirPadString().flatMap {
+//                    it.dialDirPadString()
+//                }
+//            }.sumOf { doorCode.dropLast(1).toLong() * it.length }
         }
-        TODO()
     }
 
     fun Input21.part2(): Int {
@@ -133,14 +142,28 @@ fun main() {
     fun List<List<Char>>.stringify(): String = joinToString("\n") { it.joinToString("") }
 
     check(
-        "029A".dialNumpadString().stringify() == """
+        "029A".dialNumpadString() == """
             <A^A>^^AvvvA
             <A^A^>^AvvvA
             <A^A^^>AvvvA
-        """.trimIndent()
+        """.trimIndent().split('\n')
     )
 
-    "029A".dialNumpadString().flatMap {it.dialDirPadString()}.stringify().println()
+    "029A".dialNumpadString().flatMap {
+        it.dialDirPadString().flatMap {
+            it.dialDirPadString()
+        }
+    }.minBy { it.length }.length.println()
+//    .sumOf {
+//        val x = it.length
+//        29L * x
+//    }.println()
+
+//    "029A".dialNumpadString().flatMap {
+//        it.dialDirPadString().flatMap {
+//            it.dialDirPadString()
+//        }
+//    }.map { it. }
 //    check(
 //        "029A".dialDirPadString().stringify() == """
 //            <A^A>^^AvvvA
@@ -151,14 +174,14 @@ fun main() {
 //    """.trimIndent().split('\n')
 //    check(testInput.part1() == TODO())
 //
-//    val input = """
-//        140A
-//        143A
-//        349A
-//        582A
-//        964A
-//    """.trimIndent().split('\n')
-//    input.part1().println()
+    val input = """
+        140A
+        143A
+        349A
+        582A
+        964A
+    """.trimIndent().split('\n')
+    input.part1().println()
 //    check(testInput.part2() == 4)
 //    input.part2().println()
 }
