@@ -30,20 +30,9 @@ fun main() {
         val size = toSize()
         fun shortcuts(p: Pos): List<Pos> {
             val pd = route[p.row][p.col]!! - 2
-            return listOf(
-                p.goNorth(),
-                p.goSouth(),
-                p.goEast(),
-                p.goWest(),
-            )
-                .flatMap { it ->
-                    listOf(
-                        it.goNorth(),
-                        it.goSouth(),
-                        it.goEast(),
-                        it.goWest(),
-                    )
-                }
+            return p
+                .adjacencies()
+                .flatMap { it.adjacencies() }
                 .filter {
                     if (it !in size) return@filter false
                     val q = route[it.row][it.col]
@@ -56,12 +45,7 @@ fun main() {
         var steps = 0
         var p = end!!
         while (true) {
-            val p1 = listOf(
-                p.goNorth(),
-                p.goSouth(),
-                p.goEast(),
-                p.goWest(),
-            ).firstOrNull { it in size && route[it.row][it.col] == -1 }
+            val p1 = p.adjacencies().firstOrNull { it in size && route[it.row][it.col] == -1 }
             if (p1 == null) {
                 break
             }
@@ -75,12 +59,9 @@ fun main() {
             count += shortcuts(p).count {
                 (route[p.row][p.col]!! - route[it.row][it.col]!!) - 2 >= save
             }
-            val p1 = listOf(
-                p.goNorth(),
-                p.goSouth(),
-                p.goEast(),
-                p.goWest(),
-            ).firstOrNull { it in size && (route[it.row][it.col] ?: Int.MAX_VALUE) < route[p.row][p.col]!! }
+            val p1 = p
+                .adjacencies()
+                .firstOrNull { it in size && (route[it.row][it.col] ?: Int.MAX_VALUE) < route[p.row][p.col]!! }
             if (p1 == null) {
                 break
             }
@@ -116,14 +97,7 @@ fun main() {
             val s = mutableSetOf(p)
             var q = listOf(p)
             repeat(picos) {
-                q = q.flatMap {
-                    listOf(
-                        it.goNorth(),
-                        it.goSouth(),
-                        it.goEast(),
-                        it.goWest(),
-                    )
-                }.distinct().filter { it in size && it !in s }
+                q = q.flatMap { it.adjacencies() }.distinct().filter { it in size && it !in s }
                 s += q
             }
             s.removeAll { route[it.row][it.col] == null }
@@ -133,12 +107,7 @@ fun main() {
         var steps = 0
         var p = end!!
         while (true) {
-            val p1 = listOf(
-                p.goNorth(),
-                p.goSouth(),
-                p.goEast(),
-                p.goWest(),
-            ).firstOrNull { it in size && route[it.row][it.col] == -1 }
+            val p1 = p.adjacencies().firstOrNull { it in size && route[it.row][it.col] == -1 }
             if (p1 == null) {
                 break
             }
@@ -152,12 +121,8 @@ fun main() {
             count += shortcuts(p = p, picos = picos).count {
                 (route[p.row][p.col]!! - route[it.row][it.col]!!) - (it.manhattanDistance(p)) >= save
             }
-            val p1 = listOf(
-                p.goNorth(),
-                p.goSouth(),
-                p.goEast(),
-                p.goWest(),
-            ).firstOrNull { it in size && (route[it.row][it.col] ?: Int.MAX_VALUE) < route[p.row][p.col]!! }
+            val p1 = p.adjacencies()
+                .firstOrNull { it in size && (route[it.row][it.col] ?: Int.MAX_VALUE) < route[p.row][p.col]!! }
             if (p1 == null) {
                 break
             }

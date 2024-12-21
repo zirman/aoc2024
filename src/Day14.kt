@@ -36,10 +36,9 @@ fun main() {
             if (pos in groupedCount) {
                 touched += groupedCount[pos]!!
             } else {
-                callRecursive(pos.goNorth())
-                callRecursive(pos.goSouth())
-                callRecursive(pos.goWest())
-                callRecursive(pos.goEast())
+                pos.adjacencies().forEach {
+                    callRecursive(it)
+                }
             }
         }
         for (i in 0..<size.height) {

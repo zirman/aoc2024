@@ -14,7 +14,7 @@ fun main() {
         return patterns.count { pattern ->
             val memo = mutableMapOf<Int, Boolean>()
             fun recur(index: Int): Boolean = memo.getOrPut(index) {
-                if (index >= pattern.length) {
+                if (index == pattern.length) {
                     true
                 } else {
                     towels.any { towel ->
@@ -35,7 +35,7 @@ fun main() {
         return patterns.sumOf { pattern ->
             val memo = mutableMapOf<Int, Long>()
             fun recur(index: Int): Long = memo.getOrPut(index) {
-                if (index >= pattern.length) {
+                if (index == pattern.length) {
                     1
                 } else {
                     towels.sumOf { towel ->

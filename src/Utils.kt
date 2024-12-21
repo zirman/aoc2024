@@ -29,6 +29,18 @@ fun printlnMeasureTimeMillis(block: () -> Unit) {
 
 data class Pos(val row: Int, val col: Int)
 
+fun Pos.goWest(): Pos = copy(col = col - 1)
+fun Pos.goEast(): Pos = copy(col = col + 1)
+fun Pos.goNorth(): Pos = copy(row = row - 1)
+fun Pos.goSouth(): Pos = copy(row = row + 1)
+
+fun Pos.adjacencies(): List<Pos> = listOf(
+    goWest(),
+    goEast(),
+    goNorth(),
+    goSouth(),
+)
+
 operator fun Pos.minus(pos: Pos): Pos = Pos(
     row - pos.row,
     col - pos.col,

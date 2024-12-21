@@ -8,13 +8,6 @@ fun main() {
         Pos(row.toInt(), col.toInt())
     }
 
-    fun Pos.next(): List<Pos> = listOf(
-        goNorth(),
-        goSouth(),
-        goEast(),
-        goWest(),
-    )
-
     fun Input18.part1(n: Int, size: Size): Int? {
         val visited = mutableMapOf<Pos, Int>()
         val end = Pos(size.height - 1, size.width - 1)
@@ -31,7 +24,7 @@ fun main() {
             }
             val nextSteps = steps + 1
             pos
-                .next()
+                .adjacencies()
                 .filter { it in size && it !in corrupted }
                 .forEach { pos ->
                     val visitedSteps = visited[pos]

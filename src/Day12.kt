@@ -90,15 +90,12 @@ fun main() {
             } else if (pos in visited) {
                 Pair(visited, 0)
             } else {
-                listOf(
-                    pos.goNorth(),
-                    pos.goSouth(),
-                    pos.goWest(),
-                    pos.goEast(),
-                ).fold(Pair(visited + pos, 0)) { (a, b), pos ->
-                    val (c, d) = callRecursive(Triple(char, pos, a))
-                    Pair(c, b + d)
-                }
+                pos
+                    .adjacencies()
+                    .fold(Pair(visited + pos, 0)) { (a, b), pos ->
+                        val (c, d) = callRecursive(Triple(char, pos, a))
+                        Pair(c, b + d)
+                    }
             }
         }
 
@@ -126,15 +123,12 @@ fun main() {
             } else if (pos in visited) {
                 Pair(visited, 0)
             } else {
-                listOf(
-                    pos.goNorth(),
-                    pos.goSouth(),
-                    pos.goWest(),
-                    pos.goEast(),
-                ).fold(Pair(visited + pos, 0)) { (a, b), pos ->
-                    val (c, d) = callRecursive(Triple(char, pos, a))
-                    Pair(c, b + d)
-                }
+                pos
+                    .adjacencies()
+                    .fold(Pair(visited + pos, 0)) { (a, b), pos ->
+                        val (c, d) = callRecursive(Triple(char, pos, a))
+                        Pair(c, b + d)
+                    }
             }
         }
 
