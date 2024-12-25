@@ -15,7 +15,7 @@ fun main() {
             .mapValues { (_, b) -> b.map { it.second } }
     }
 
-    fun Input23.part1(): Int = buildSet<Set<String>> {
+    fun Input23.part1(): Int = buildSet {
         this@part1.forEach { (computer1, connections) ->
             connections.forEach { computer2 ->
                 getValue(computer2).forEach { computer3 ->
