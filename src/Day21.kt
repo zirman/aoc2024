@@ -1,7 +1,5 @@
 private typealias Input21 = List<String>
 
-private data class KeypadMoves(val prev: List<Char>, val pos: Pos)
-
 fun main() {
     val numpadCharToPos = mapOf(
         '7' to Pos(0, 0),
@@ -108,15 +106,20 @@ fun main() {
         }
     }
 
-    fun String.dialDirPadString(): List<String> {
-        fun String.recur(index: Int, pos: Pos): List<String> {
-            if (index !in this@dialDirPadString.indices) return listOf(this)
-            val nextPos = dirPadCharToPos[this@dialDirPadString[index]]!!
-            return pos.dialDirPadPos(nextPos).flatMap { it ->
-                (this + it).recur(index + 1, dirPadCharToPos[this@dialDirPadString[index]]!!)
+    val memoDialDirPadString = mutableMapOf<Pair<String, Pos>, List<String>>()
+    fun String.dialDirPadString(pos: Pos = Pos(0, 2)): List<String> = memoDialDirPadString.getOrPut(Pair(this, pos)) {
+        if (isEmpty()) {
+            listOf("")
+        } else {
+            val nextPos = dirPadCharToPos.getValue(first())
+            // TODO: Build tree instead of list
+            var q = drop(1).dialDirPadString(nextPos)
+            pos.dialDirPadPos(nextPos).flatMap {
+                q.map { r ->
+                    it + r
+                }
             }
         }
-        return "".recur(0, Pos(0, 2))
     }
 
     fun Input21.part1(): Long = sumOf { doorCode ->
@@ -149,17 +152,22 @@ fun main() {
                                                                                 it.dialDirPadString().flatMap {
                                                                                     it.dialDirPadString().flatMap {
                                                                                         it.dialDirPadString().flatMap {
-                                                                                            it.dialDirPadString().flatMap {
-                                                                                                it.dialDirPadString().flatMap {
-                                                                                                    it.dialDirPadString().flatMap {
-                                                                                                        it.dialDirPadString().flatMap {
-                                                                                                            it.dialDirPadString().flatMap {
-                                                                                                                it.dialDirPadString()
-                                                                                                            }
+                                                                                            it.dialDirPadString()
+                                                                                                .flatMap {
+                                                                                                    it.dialDirPadString()
+                                                                                                        .flatMap {
+                                                                                                            it.dialDirPadString()
+                                                                                                                .flatMap {
+                                                                                                                    it.dialDirPadString()
+                                                                                                                        .flatMap {
+                                                                                                                            it.dialDirPadString()
+                                                                                                                                .flatMap {
+                                                                                                                                    it.dialDirPadString()
+                                                                                                                                }
+                                                                                                                        }
+                                                                                                                }
                                                                                                         }
-                                                                                                    }
                                                                                                 }
-                                                                                            }
                                                                                         }
                                                                                     }
                                                                                 }

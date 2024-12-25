@@ -114,6 +114,18 @@ fun Long.countDigits(base: Int = 10): Int {
 fun Long.evenDivOrZero(denominator: Long): Long = if (this % denominator != 0L) 0 else this / denominator
 fun Int.evenDivOrZero(denominator: Int): Int = if (this % denominator != 0) 0 else this / denominator
 
+fun <T> List<List<T>>.transpose(): List<List<T>> = buildList {
+    for (x in this@transpose.first().indices) {
+        add(
+            buildList {
+                for (y in this@transpose.indices) {
+                    add(this@transpose[y][x])
+                }
+            }
+        )
+    }
+}
+
 //fun <T> List<List<T>>.window(width: Int, height: Int): List<List<T>> {
 //    for (i in indices) {}
 //    windowed(height).map { line ->
